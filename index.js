@@ -34,21 +34,6 @@ run();
 
 //====database collections=====//
 const todoCollection = client.db("hsTodo").collection("todo");
-const userCollection = client.db("hsTodo").collection("user");
-
-//===Post user's===//
-// app.post("/user", async (req, res) => {
-//   try {
-//     const user = req.body;
-//     await userCollection.insertOne(user);
-//     res.send({ success: true, message: "User data added to DB!" });
-//   } catch (error) {
-//     res.send({
-//       success: false,
-//       message: "Couldn't add this user, please try again!",
-//     });
-//   }
-// });
 
 //<===>Post To-do's<===>//
 //<========================>//
