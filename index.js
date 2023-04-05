@@ -12,7 +12,7 @@ app.use(express());
 
 //==> Mongo BoilerPlate <===//
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
   "mongodb+srv://userdashboard:L7gpwkHEpWQxXqt6@cluster0.otp6uvz.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -55,9 +55,10 @@ const userCollection = client.db("hsTodo").collection("user");
 app.post("/todo", async (req, res) => {
   try {
     const todo = req.body;
-    const result = await todoCollection.insertOne(todo);
+    await todoCollection.insertOne(todo);
     res.send({ success: true, message: "New note added!" });
   } catch (error) {
+    console.log(error);
     res.send({
       success: false,
       message: "Couldn't add a note, please try again!",
@@ -66,9 +67,10 @@ app.post("/todo", async (req, res) => {
 });
 
 //====Get to-do's====//
-app.get("/todo", async (req, res) => {
+app.get("/todo/:email", async (req, res) => {
   try {
-    const result = await todoCollection.find({}).toArray();
+    const email = req.params.email;
+    const result = await todoCollection.find({ email }).toArray();
     res.send({ success: true, data: result });
   } catch (error) {
     res.send({ success: false });
@@ -79,8 +81,8 @@ app.get("/todo", async (req, res) => {
 app.patch("/todo/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await new todoCollection.findOneAndUpdate(
-      { _id: ObjectId(id) },
+    const result = await todoCollection.updateOne(
+      { _id: new ObjectId(id) },
       { $set: req.body }
     );
     res.send({ success: true, message: "Updated successfully!!" });
