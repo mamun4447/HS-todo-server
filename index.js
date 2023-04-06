@@ -89,6 +89,23 @@ app.delete("/todo/:id", async (req, res) => {
   }
 });
 
+//===> Update Completed <===//
+app.patch("/complete/:id", async (req, res) => {
+  try {
+     const id = req.params.id;
+     const result = await todoCollection.updateOne(
+       { _id: new ObjectId(id) },
+       { $set: req.body }
+     );
+     res.send({ success: true, message: "Completed successfully!!" });
+  } catch (error) {
+    console.error(error);
+    res.send({ success: false, message: "Couldn't complete, please try again!" });
+  }
+})
+
+
+
 //===> Initial <===//
 app.get("/", (req, res) => {
   res.send("Server is running!");
